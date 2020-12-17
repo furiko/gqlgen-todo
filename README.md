@@ -12,3 +12,8 @@ make server/run
 ```
 
 ブラウザから`localhost:8080`に接続
+
+## 停止方法
+```bash
+make server/stop
+```
