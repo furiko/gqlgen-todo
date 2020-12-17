@@ -23,6 +23,18 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+func (r *mutationResolver) DeleteTodo(ctx context.Context, input model.DeleteTodo) (*model.Todo, error) {
+	var index int
+	for i, v := range r.todos {
+		if v.ID == input.ID {
+			index = i
+		}
+	}
+	todo := r.todos[index]
+	r.todos = append(r.todos[0:index], r.todos[index+1:]...)
+	return todo, nil
+}
+
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
 }
