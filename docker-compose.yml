@@ -1,0 +1,27 @@
+version: "3"
+services:
+  app:
+    build: .
+    container_name: server
+    ports:
+      - "8080:8080"
+    restart: always
+  db:
+    image: mysql
+    ports:
+    - "3306:3306"
+    container_name: db
+    environment:
+      MYSQL_DATABASE: todo
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+    - data-volume:/var/lib/mysql
+  migration:
+    build: ./database
+    container_name: migration
+    tty: true
+
+volumes:
+  data-volume:

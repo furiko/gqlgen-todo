@@ -6,6 +6,9 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
+
+	//"log"
 	"math/rand"
 
 	"github.com/furiko/gqlgen-todo/graph/generated"
@@ -15,11 +18,16 @@ import (
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	todo := &model.Todo{
 		Text:   input.Text,
-		ID:     fmt.Sprintf("T%d", rand.Int()),
+		ID:     fmt.Sprintf("%d", rand.Intn(1000000)),
+		Done: false,
 		UserID: input.UserID,
 	}
-
-	r.todos = append(r.todos, todo)
+	log.Printf("todo id: %v\n", todo.ID)
+	err := r.DB.Insert(todo)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//r.todos = append(r.todos, todo)
 	return todo, nil
 }
 
@@ -36,6 +44,15 @@ func (r *mutationResolver) DeleteTodo(ctx context.Context, input model.DeleteTod
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+	var todos []*model.Todo
+	_, err := r.DB.Select(&todos, "SELECT * FROM todos")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for _, v := range todos {
+		log.Println(v)
+	}
+	r.todos = todos
 	return r.todos, nil
 }
 

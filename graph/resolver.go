@@ -2,7 +2,11 @@ package graph
 
 //go:generate go run github.com/99designs/gqlgen
 
-import "github.com/furiko/gqlgen-todo/graph/model"
+import (
+	"gopkg.in/gorp.v1"
+
+	"github.com/furiko/gqlgen-todo/graph/model"
+)
 
 // This file will not be regenerated automatically.
 //
@@ -10,4 +14,5 @@ import "github.com/furiko/gqlgen-todo/graph/model"
 
 type Resolver struct{
 	todos []*model.Todo
+	DB *gorp.DbMap
 }
